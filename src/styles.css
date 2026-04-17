@@ -1,0 +1,97 @@
+/* ═══════════════════════════════════════════════════════════ */
+/*  MOVIFLIX — Global Styles                                   */
+/*  Google Fonts + Reset + Theme tokens + Spinner + Scrollbar  */
+/* ═══════════════════════════════════════════════════════════ */
+
+/* ── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ── Tailwind (uncomment once `npm install` is done) ──────── */
+/* @tailwind base;        */
+/* @tailwind components;  */
+/* @tailwind utilities;   */
+
+/* ── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Root tokens — Light mode ─────────────────────────────── */
+:root {
+  --mv-50:  #f0fdf1;
+  --mv-100: #d4f5d8;
+  --mv-200: #a8edaf;
+  --mv-300: #6fd97a;
+  --mv-400: #39c447;
+  --mv-500: #27a033;
+  --mv-600: #1e6626;
+  --mv-700: #174a1d;
+  --mv-800: #0f2e14;
+  --mv-900: #0a1a0d;
+
+  --bg:       #f4faf5;
+  --surface:  #ffffff;
+  --border:   #d4f5d8;
+  --text:     #0a1a0d;
+  --text-2:   #174a1d;
+  --accent:   #27a033;
+  --accent-2: #39c447;
+}
+
+/* ── Root tokens — Dark mode ──────────────────────────────── */
+html.dark {
+  --bg:       #080f09;
+  --surface:  #0a1a0d;
+  --border:   rgba(30, 102, 38, 0.20);
+  --text:     #d4f5d8;
+  --text-2:   #6fd97a;
+  --accent:   #39c447;
+  --accent-2: #6fd97a;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  font-family: 'DM Sans', sans-serif;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3 { line-height: 1.2; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+
+/* ── Moviflix animated spinner ────────────────────────────── */
+.mv-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(39, 160, 51, 0.15);
+  border-top-color: #27a033;
+  border-radius: 50%;
+  animation: mv-spin 0.8s linear infinite;
+}
+
+html.dark .mv-spinner {
+  border-color: rgba(57, 196, 71, 0.15);
+  border-top-color: #39c447;
+}
+
+/* ── Custom scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar          { width: 5px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    { background: rgba(39,160,51,0.3); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #27a033; }
+
+/* ── Keyframes ────────────────────────────────────────────── */
+@keyframes mv-spin {
+  to { transform: rotate(360deg); }
+}

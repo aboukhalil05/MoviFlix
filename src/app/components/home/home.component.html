@@ -1,0 +1,145 @@
+<!-- ──────────────────────────────────────────────────── -->
+<!-- HERO SECTION                                         -->
+<!-- ──────────────────────────────────────────────────── -->
+<section class="hero-section">
+  <!-- Grid background pattern -->
+  <div class="hero-grid"></div>
+
+  <!-- Gradient overlay -->
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <!-- Eyebrow -->
+    <p class="hero-eyebrow">
+      <span class="eyebrow-dot"></span>
+      Votre univers cinématographique
+    </p>
+
+    <!-- Main title -->
+    <h1 class="hero-title">
+      Découvrez<br>
+      <span class="hero-title-accent">Chaque Histoire</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Recherchez des millions de films, explorez les notes, le casting, l'intrigue et bien plus.
+    </p>
+
+    <!-- Quick search bar -->
+    <div class="hero-search">
+      <div class="search-wrapper">
+        <svg class="search-icon-hero" width="20" height="20" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          id="hero-search-input"
+          [(ngModel)]="quickSearch"
+          (keydown)="onKeyEnter($event)"
+          placeholder="Rechercher un titre…"
+          class="hero-input"
+        />
+        <button id="hero-search-btn" class="hero-btn" (click)="onQuickSearch()">
+          Rechercher
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats pills -->
+    <div class="hero-stats">
+      <div class="stat-pill">
+        <span class="stat-num">1M+</span>
+        <span class="stat-lbl">Films</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-pill">
+        <span class="stat-num">IMDb</span>
+        <span class="stat-lbl">Propulsé par</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-pill">
+        <span class="stat-num">Gratuit</span>
+        <span class="stat-lbl">Toujours</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint">
+    <span>↓</span>
+  </div>
+</section>
+
+<!-- ──────────────────────────────────────────────────── -->
+<!-- FEATURED FILMS SECTION                               -->
+<!-- ──────────────────────────────────────────────────── -->
+<section class="featured-section">
+  <div class="section-wrapper">
+
+    <!-- Section header -->
+    <div class="section-header">
+      <div class="section-title-group">
+        <span class="section-tag">À la une</span>
+        <h2 class="section-title">Films Vedettes</h2>
+      </div>
+      <a routerLink="/search" class="see-all-link" id="home-see-all">
+        Voir tout
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Loading skeleton -->
+    <div *ngIf="loading" class="skeleton-grid">
+      <div *ngFor="let i of [1,2,3,4,5,6]" class="skeleton-card">
+        <div class="skeleton-poster"></div>
+        <div class="skeleton-info">
+          <div class="skeleton-line w-3/4"></div>
+          <div class="skeleton-line w-1/2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie grid -->
+    <div class="movies-grid" *ngIf="!loading">
+      <a
+        *ngFor="let movie of featured"
+        [routerLink]="['/movie', movie.imdbID]"
+        class="movie-card"
+        id="home-movie-{{ movie.imdbID }}"
+      >
+        <!-- Poster -->
+        <div class="card-poster-wrap">
+          <img
+            [src]="movie.Poster !== 'N/A' ? movie.Poster : 'assets/no-poster.png'"
+            [alt]="movie.Title"
+            loading="lazy"
+            class="card-poster-img"
+          />
+          <!-- Overlay on hover -->
+          <div class="card-overlay">
+            <div class="overlay-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              Voir détails
+            </div>
+          </div>
+          <!-- Year badge -->
+          <span class="year-badge">{{ movie.Year }}</span>
+        </div>
+
+        <!-- Card info -->
+        <div class="card-info">
+          <h3 class="card-title">{{ movie.Title }}</h3>
+          <span class="card-type">{{ movie.Type | uppercase }}</span>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</section>

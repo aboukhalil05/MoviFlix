@@ -1,0 +1,89 @@
+<!-- ── Moviflix Navbar ──────────────────────────────────────────── -->
+<nav class="nav-root">
+  <!-- Glass backdrop blur line -->
+  <div class="nav-inner">
+
+    <!-- Brand / Logo -->
+    <a routerLink="/" class="brand-link" id="nav-logo">
+      <span class="brand-icon">🎬</span>
+      <span class="brand-name">Moviflix</span>
+    </a>
+
+    <!-- Desktop Navigation Links -->
+    <ul class="nav-links" id="nav-desktop-links">
+      <li>
+        <a routerLink="/"
+           routerLinkActive="nav-active"
+           [routerLinkActiveOptions]="{exact:true}"
+           class="nav-link"
+           id="nav-link-home">
+          Home
+        </a>
+      </li>
+      <li>
+        <a routerLink="/search"
+           routerLinkActive="nav-active"
+           class="nav-link"
+           id="nav-link-search">
+          Search
+        </a>
+      </li>
+      <li>
+        <a routerLink="/favorites"
+           routerLinkActive="nav-active"
+           class="nav-link fav-link"
+           (click)="refreshCount()"
+           id="nav-link-favorites">
+          Favorites
+          <span class="fav-badge" *ngIf="favCount > 0" id="nav-fav-count">{{ favCount }}</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Right side actions -->
+    <div class="nav-actions">
+      <!-- Theme toggle -->
+      <button
+        id="btn-theme-toggle"
+        class="theme-toggle"
+        (click)="themeService.toggle()"
+        [attr.aria-label]="themeService.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+        [title]="themeService.isDark() ? 'Mode clair' : 'Mode sombre'"
+      >
+        <!-- Sun icon (show in dark mode) -->
+        <svg *ngIf="themeService.isDark()" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <!-- Moon icon (show in light mode) -->
+        <svg *ngIf="!themeService.isDark()" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+
+      <!-- Hamburger (mobile) -->
+      <button
+        id="btn-hamburger"
+        class="hamburger"
+        (click)="toggleMenu()"
+        aria-label="Toggle menu"
+      >
+        <span [class.open]="menuOpen"></span>
+        <span [class.open]="menuOpen"></span>
+        <span [class.open]="menuOpen"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.mobile-open]="menuOpen" id="nav-mobile-menu">
+    <a routerLink="/" (click)="menuOpen=false" class="mobile-link">Home</a>
+    <a routerLink="/search" (click)="menuOpen=false" class="mobile-link">Search</a>
+    <a routerLink="/favorites" (click)="menuOpen=false; refreshCount()" class="mobile-link">
+      Favorites
+      <span *ngIf="favCount > 0" class="fav-badge ml-2">{{ favCount }}</span>
+    </a>
+  </div>
+</nav>

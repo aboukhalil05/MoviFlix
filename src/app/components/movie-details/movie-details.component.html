@@ -1,0 +1,182 @@
+<div class="details-page">
+
+  <!-- ── Back button ──────────────────────────────────── -->
+  <div class="back-bar">
+    <div class="back-bar-inner">
+      <button id="btn-back" class="back-btn" (click)="goBack()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+        Retour
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Loading ──────────────────────────────────────── -->
+  <div class="spinner-wrap" *ngIf="loading">
+    <div class="mv-spinner"></div>
+    <p class="loading-label">Chargement du film…</p>
+  </div>
+
+  <!-- ── Error ────────────────────────────────────────── -->
+  <div class="error-box" *ngIf="error && !loading">
+    <div class="error-icon">⚠️</div>
+    <div>
+      <p class="error-msg">{{ error }}</p>
+      <a routerLink="/search" class="error-link">Retour à la recherche →</a>
+    </div>
+  </div>
+
+  <!-- ── Movie Content ─────────────────────────────────── -->
+  <div class="movie-layout" *ngIf="movie && !loading">
+
+    <!-- Hero backdrop blur overlay -->
+    <div class="details-hero">
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="movie-inner">
+
+      <!-- ── Left: Poster column ───────────────────────── -->
+      <aside class="poster-col">
+
+        <!-- Poster frame -->
+        <div class="poster-frame">
+          <img [src]="getPosterUrl(movie.Poster)" [alt]="movie.Title" class="poster-img"/>
+          <!-- IMDb rating badge -->
+          <div class="imdb-badge" *ngIf="movie.imdbRating !== 'N/A'">
+            <span class="imdb-star">★</span>
+            <span class="imdb-score">{{ movie.imdbRating }}</span>
+            <span class="imdb-label">IMDb</span>
+          </div>
+        </div>
+
+        <!-- Rating ring -->
+        <div class="rating-ring-wrap" *ngIf="movie.imdbRating !== 'N/A'">
+          <svg viewBox="0 0 80 80" class="ring-svg">
+            <circle cx="40" cy="40" r="34" class="ring-bg"/>
+            <circle
+              cx="40" cy="40" r="34"
+              class="ring-fill"
+              [style.stroke-dashoffset]="213.6 - (213.6 * imdbPercent / 100)"
+            />
+          </svg>
+          <div class="ring-label">
+            <span class="ring-score">{{ movie.imdbRating }}</span>
+            <span class="ring-sub">/ 10</span>
+          </div>
+        </div>
+
+        <!-- Favorite toggle button -->
+        <button
+          id="btn-fav-toggle"
+          class="fav-toggle"
+          [class.fav-active]="isFav"
+          (click)="toggleFavorite()"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24"
+               [attr.fill]="isFav ? 'currentColor' : 'none'"
+               stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          {{ isFav ? 'Sauvegardé' : 'Ajouter aux favoris' }}
+        </button>
+
+      </aside>
+
+      <!-- ── Right: Info column ─────────────────────────── -->
+      <main class="info-col">
+
+        <!-- Meta row + Title -->
+        <div class="movie-head">
+          <div class="meta-row">
+            <span class="rated-badge" *ngIf="movie.Rated !== 'N/A'">{{ movie.Rated }}</span>
+            <span class="meta-chip">{{ movie.Year }}</span>
+            <span class="meta-dot">·</span>
+            <span class="meta-chip">{{ movie.Runtime }}</span>
+            <span class="meta-dot">·</span>
+            <span class="meta-chip type-chip">{{ movie.Type | uppercase }}</span>
+          </div>
+
+          <h1 class="movie-title" id="movie-title">{{ movie.Title }}</h1>
+
+          <!-- Genre tags -->
+          <div class="genre-tags">
+            <span *ngFor="let genre of genreList" class="genre-tag">{{ genre }}</span>
+          </div>
+        </div>
+
+        <!-- Plot -->
+        <section class="detail-section" *ngIf="movie.Plot !== 'N/A'">
+          <h2 class="section-label">Synopsis</h2>
+          <p class="plot-text">{{ movie.Plot }}</p>
+        </section>
+
+        <!-- Director & Writer -->
+        <section class="detail-section">
+          <div class="crew-grid">
+            <div class="crew-item" *ngIf="movie.Director !== 'N/A'">
+              <span class="crew-role">Réalisateur</span>
+              <span class="crew-name">{{ movie.Director }}</span>
+            </div>
+            <div class="crew-item" *ngIf="movie.Writer !== 'N/A'">
+              <span class="crew-role">Scénariste</span>
+              <span class="crew-name">{{ movie.Writer }}</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Actors -->
+        <section class="detail-section" *ngIf="movie.Actors !== 'N/A'">
+          <h2 class="section-label">Casting</h2>
+          <div class="actor-chips">
+            <span *ngFor="let actor of actorList" class="actor-chip">{{ actor }}</span>
+          </div>
+        </section>
+
+        <!-- Ratings -->
+        <section class="detail-section" *ngIf="movie.Ratings && movie.Ratings.length > 0">
+          <h2 class="section-label">Notes</h2>
+          <div class="ratings-list">
+            <div *ngFor="let r of movie.Ratings" class="rating-item">
+              <span class="rating-source">{{ r.Source }}</span>
+              <span class="rating-value">{{ r.Value }}</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Extra info grid -->
+        <section class="detail-section">
+          <div class="extra-grid">
+            <div class="extra-item" *ngIf="movie.Released !== 'N/A'">
+              <span class="extra-label">Sortie</span>
+              <span class="extra-val">{{ movie.Released }}</span>
+            </div>
+            <div class="extra-item" *ngIf="movie.Language !== 'N/A'">
+              <span class="extra-label">Langue</span>
+              <span class="extra-val">{{ movie.Language }}</span>
+            </div>
+            <div class="extra-item" *ngIf="movie.Country !== 'N/A'">
+              <span class="extra-label">Pays</span>
+              <span class="extra-val">{{ movie.Country }}</span>
+            </div>
+            <div class="extra-item" *ngIf="movie.BoxOffice && movie.BoxOffice !== 'N/A'">
+              <span class="extra-label">Box Office</span>
+              <span class="extra-val success">{{ movie.BoxOffice }}</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Awards -->
+        <section class="awards-section" *ngIf="movie.Awards !== 'N/A'">
+          <div class="award-badge">
+            <span class="award-icon">🏆</span>
+            <p class="award-text">{{ movie.Awards }}</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</div>

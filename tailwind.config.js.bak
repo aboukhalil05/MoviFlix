@@ -1,0 +1,30 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: 'class',
+  content: [
+    './src/**/*.{html,ts}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        mv: {
+          900: '#0a1a0d',
+          800: '#0f2e14',
+          700: '#174a1d',
+          600: '#1e6626',
+          500: '#27a033',
+          400: '#39c447',
+          300: '#6fd97a',
+          200: '#a8edaf',
+          100: '#d4f5d8',
+          50:  '#f0fdf1',
+        }
+      },
+      fontFamily: {
+        display: ['"Bebas Neue"', 'sans-serif'],
+        body: ['"DM Sans"', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+};
