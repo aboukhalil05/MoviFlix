@@ -1,0 +1,136 @@
+:host {
+  display: block;
+}
+
+.loading-shell {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow: hidden;
+  background-color: var(--bg);
+}
+
+.loading-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(39, 160, 51, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(39, 160, 51, 0.06) 1px, transparent 1px);
+  background-size: 38px 38px;
+}
+
+.loading-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 55% 40% at 50% 56%,
+    rgba(39, 160, 51, 0.15) 0%,
+    transparent 70%
+  );
+}
+
+.loading-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 1.2rem;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  box-shadow: 0 16px 40px rgba(39, 160, 51, 0.12);
+  text-align: center;
+}
+
+.loading-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--accent);
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+.loading-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.9rem, 8vw, 4.6rem);
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: 0.06em;
+}
+
+.loading-title-accent {
+  color: var(--accent);
+}
+
+.loader-orbit {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  margin: 0.35rem 0;
+}
+
+.orbit-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  border-top-color: var(--accent);
+  border-right-color: var(--accent-2);
+  animation: ring-spin 1.05s linear infinite;
+}
+
+.orbit-ring-delay {
+  inset: 7px;
+  animation-duration: 1.45s;
+  animation-direction: reverse;
+  opacity: 0.9;
+}
+
+.orbit-core {
+  position: absolute;
+  inset: 20px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, var(--accent-2), var(--accent));
+  box-shadow: 0 0 22px rgba(39, 160, 51, 0.35);
+}
+
+.loading-text {
+  font-size: 0.95rem;
+  color: var(--text-2);
+}
+
+@keyframes ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.82);
+  }
+}
