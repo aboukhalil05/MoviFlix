@@ -2,11 +2,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MovieSearchResult } from '../../models/movie.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroHeart } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-movie-card',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NgIcon],
+  providers: [provideIcons({ heroHeart })],
   templateUrl: './movie-card.component.html',
   styleUrl: './movie-card.component.css'
 })

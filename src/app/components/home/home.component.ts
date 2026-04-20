@@ -5,11 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { MovieService } from '../../services/movie.service';
 import { MovieSearchResult } from '../../models/movie.model';
 import { RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroArrowDown, heroArrowRight, heroMagnifyingGlass, heroPlay } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, NgIcon],
+  providers: [provideIcons({ heroMagnifyingGlass, heroArrowRight, heroPlay, heroArrowDown })],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

@@ -9,10 +9,7 @@
 
       <!-- Search bar -->
       <div class="search-bar-wrap" id="search-bar">
-        <svg class="bar-icon" width="18" height="18" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
+        <ng-icon name="heroMagnifyingGlass" class="bar-icon" size="18"></ng-icon>
         <input
           type="text"
           id="search-main-input"
@@ -24,9 +21,7 @@
           autofocus
         />
         <button *ngIf="query" id="btn-clear-search" class="bar-clear" (click)="clearSearch()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <path d="M18 6 6 18M6 6l12 12"/>
-          </svg>
+          <ng-icon name="heroXMark" size="14"></ng-icon>
         </button>
         <button id="btn-search" class="bar-submit" (click)="onSearch()">Chercher</button>
       </div>
@@ -81,7 +76,7 @@
 
     <!-- ── Error ───────────────────────────────────────── -->
     <div class="error-box" *ngIf="error && !loading">
-      <div class="error-icon">⚠️</div>
+      <ng-icon name="heroExclamationTriangle" class="error-icon" size="22"></ng-icon>
       <div class="error-body">
         <p class="error-msg">{{ error }}</p>
         <p class="error-hint">Essayez un autre titre ou vérifiez l'orthographe.</p>
@@ -90,7 +85,7 @@
 
     <!-- ── Empty state ─────────────────────────────────── -->
     <div class="empty-state" *ngIf="!loading && !error && results.length === 0 && !query">
-      <div class="empty-icon">🎥</div>
+      <ng-icon name="heroMagnifyingGlass" class="empty-icon" size="48"></ng-icon>
       <h2 class="empty-title">À votre recherche</h2>
       <p class="empty-desc">Commencez à taper pour découvrir des films et séries.</p>
     </div>
@@ -108,9 +103,7 @@
     <!-- ── Pagination ───────────────────────────────────── -->
     <nav class="pagination" *ngIf="totalPages > 1 && !loading" aria-label="Pagination">
       <button id="btn-prev-page" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1" class="page-btn page-arrow">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M15 18l-6-6 6-6"/>
-        </svg>
+        <ng-icon name="heroChevronLeft" size="16"></ng-icon>
       </button>
 
       <button
@@ -122,9 +115,7 @@
       >{{ p }}</button>
 
       <button id="btn-next-page" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages" class="page-btn page-arrow">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M9 18l6-6-6-6"/>
-        </svg>
+        <ng-icon name="heroChevronRight" size="16"></ng-icon>
       </button>
     </nav>
 

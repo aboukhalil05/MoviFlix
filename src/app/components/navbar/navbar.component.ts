@@ -3,11 +3,14 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MovieService } from '../../services/movie.service';
 import { ThemeService } from '../../services/theme.service';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroBars3, heroMagnifyingGlass, heroMoon, heroSun } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterLink, RouterLinkActive, CommonModule, NgIcon],
+  providers: [provideIcons({ heroSun, heroMoon, heroBars3, heroMagnifyingGlass })],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })

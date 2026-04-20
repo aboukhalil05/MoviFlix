@@ -4,10 +4,7 @@
   <div class="back-bar">
     <div class="back-bar-inner">
       <button id="btn-back" class="back-btn" (click)="goBack()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2.5">
-          <path d="M15 18l-6-6 6-6"/>
-        </svg>
+        <ng-icon name="heroChevronLeft" size="16"></ng-icon>
         Retour
       </button>
     </div>
@@ -21,7 +18,7 @@
 
   <!-- ── Error ────────────────────────────────────────── -->
   <div class="error-box" *ngIf="error && !loading">
-    <div class="error-icon">⚠️</div>
+    <ng-icon name="heroExclamationTriangle" class="error-icon" size="22"></ng-icon>
     <div>
       <p class="error-msg">{{ error }}</p>
       <a routerLink="/search" class="error-link">Retour à la recherche →</a>
@@ -75,11 +72,7 @@
           [class.fav-active]="isFav"
           (click)="toggleFavorite()"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24"
-               [attr.fill]="isFav ? 'currentColor' : 'none'"
-               stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
+          <ng-icon name="heroHeart" size="16" [attr.fill]="isFav ? 'currentColor' : 'none'"></ng-icon>
           {{ isFav ? 'Sauvegardé' : 'Ajouter aux favoris' }}
         </button>
 
@@ -196,7 +189,7 @@
         <!-- Awards -->
         <section class="awards-section" *ngIf="movie.Awards !== 'N/A'">
           <div class="award-badge">
-            <span class="award-icon">🏆</span>
+            <ng-icon name="heroTrophy" class="award-icon" size="24"></ng-icon>
             <p class="award-text">{{ movie.Awards }}</p>
           </div>
         </section>

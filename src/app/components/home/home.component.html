@@ -28,10 +28,7 @@
     <!-- Quick search bar -->
     <div class="hero-search">
       <div class="search-wrapper">
-        <svg class="search-icon-hero" width="20" height="20" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
+        <ng-icon name="heroMagnifyingGlass" class="search-icon-hero" size="20"></ng-icon>
         <input
           type="text"
           id="hero-search-input"
@@ -67,7 +64,7 @@
 
   <!-- Scroll hint -->
   <div class="scroll-hint">
-    <span>↓</span>
+    <ng-icon name="heroArrowDown" size="22"></ng-icon>
   </div>
 </section>
 
@@ -85,10 +82,7 @@
       </div>
       <a routerLink="/search" class="see-all-link" id="home-see-all">
         Explorer
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2.5">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
+        <ng-icon name="heroArrowRight" size="16"></ng-icon>
       </a>
     </div>
 
@@ -125,10 +119,7 @@
               />
               <div class="card-overlay">
                 <div class="overlay-btn">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                       stroke="currentColor" stroke-width="2.5">
-                    <polygon points="5 3 19 12 5 21 5 3"/>
-                  </svg>
+                  <ng-icon name="heroPlay" size="18"></ng-icon>
                   Voir détails
                 </div>
               </div>

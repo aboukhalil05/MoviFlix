@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MovieSearchResult } from '../../models/movie.model';
 import { FavoritesService } from '../../services/favorites.service';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroHeart, heroMagnifyingGlass, heroTrash, heroXMark } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NgIcon],
+  providers: [provideIcons({ heroTrash, heroHeart, heroMagnifyingGlass, heroXMark })],
   templateUrl: './favorites.component.html',
   styleUrls: ['./favorites.component.css']
 })

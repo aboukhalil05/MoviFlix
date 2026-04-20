@@ -17,10 +17,7 @@
         *ngIf="favorites.length > 0"
         (click)="clearAll()"
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
-          <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
-        </svg>
+        <ng-icon name="heroTrash" size="14"></ng-icon>
         Tout supprimer
       </button>
     </div>
@@ -31,17 +28,12 @@
     <!-- ── Empty state ─────────────────────────────────── -->
     <div class="empty-state" *ngIf="favorites.length === 0">
       <div class="empty-heart">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="1.5">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
+        <ng-icon name="heroHeart" size="48"></ng-icon>
       </div>
       <h2 class="empty-title">Aucun favori pour l'instant</h2>
       <p class="empty-desc">Parcourez des films et cliquez sur le cœur pour les sauvegarder ici.</p>
       <a routerLink="/search" class="browse-btn" id="btn-browse-movies">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
+        <ng-icon name="heroMagnifyingGlass" size="16"></ng-icon>
         Parcourir les films
       </a>
     </div>
@@ -62,9 +54,7 @@
           title="Retirer"
           id="remove-{{ movie.imdbID }}"
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <path d="M18 6 6 18M6 6l12 12"/>
-          </svg>
+          <ng-icon name="heroXMark" size="12"></ng-icon>
         </button>
 
         <!-- Poster -->

@@ -7,11 +7,20 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { MovieService } from '../../services/movie.service';
 import { MovieSearchResult } from '../../models/movie.model';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  heroChevronLeft,
+  heroChevronRight,
+  heroExclamationTriangle,
+  heroMagnifyingGlass,
+  heroXMark
+} from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, MovieCardComponent],
+  imports: [CommonModule, FormsModule, MovieCardComponent, NgIcon],
+  providers: [provideIcons({ heroMagnifyingGlass, heroXMark, heroExclamationTriangle, heroChevronLeft, heroChevronRight })],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })

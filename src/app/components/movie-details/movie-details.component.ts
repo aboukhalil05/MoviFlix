@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
 import { MovieDetail, MovieSearchResult } from '../../models/movie.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroChevronLeft, heroExclamationTriangle, heroHeart, heroTrophy } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NgIcon],
+  providers: [provideIcons({ heroChevronLeft, heroHeart, heroExclamationTriangle, heroTrophy })],
   templateUrl: './movie-details.component.html',
   styleUrls: ['./movie-details.component.css']
 })
