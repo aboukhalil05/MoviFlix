@@ -1,22 +1,30 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { MovieService } from '../../services/movie.service';
 import { MovieSearchResult } from '../../models/movie.model';
-import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { MovieCardComponent } from '../movie-card/movie-card.component';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TruncatePipe],
+  imports: [CommonModule, FormsModule, MovieCardComponent],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit, OnDestroy {
   query = '';
+  selectedType = '';
+  year = '';
+  readonly typeOptions = [
+    { label: 'Tous', value: '' },
+    { label: 'Films', value: 'movie' },
+    { label: 'Séries', value: 'series' },
+    { label: 'Épisodes', value: 'episode' }
+  ];
   results: MovieSearchResult[] = [];
   loading = false;
   error = '';
@@ -35,9 +43,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Subscribe to debounced input (300ms delay)
+    // Subscribe to debounced input (500ms delay)
     this.searchSubject.pipe(
-      debounceTime(300),
+      debounceTime(500),
       distinctUntilChanged(),
       takeUntil(this.destroy$)
     ).subscribe(q => {
@@ -49,8 +57,11 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     // Pick up ?q= from URL (coming from home page quick search)
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      if (params['q']) {
-        this.query = params['q'];
+      this.query = params['q'] || '';
+      this.selectedType = params['type'] || '';
+      this.year = params['year'] || '';
+
+      if (this.query) {
         this.currentPage = 1;
         this.fetchMovies();
       }
@@ -72,7 +83,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (!this.query.trim()) return;
     this.currentPage = 1;
     this.fetchMovies();
-    this.router.navigate([], { queryParams: { q: this.query }, replaceUrl: true });
+    this.updateQueryParams();
   }
 
   onKeyEnter(event: KeyboardEvent): void {
@@ -84,7 +95,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = '';
 
-    this.movieService.searchMovies(this.query, this.currentPage).subscribe({
+    this.movieService.searchMovies(this.query, this.currentPage, this.selectedType, this.year).subscribe({
       next: res => {
         this.loading = false;
         if (res.Response === 'True') {
@@ -110,8 +121,47 @@ export class SearchComponent implements OnInit, OnDestroy {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  getPosterUrl(poster: string): string {
-    return poster && poster !== 'N/A' ? poster : 'assets/no-poster.png';
+  onTypeChange(type: string): void {
+    if (this.selectedType === type) return;
+    this.selectedType = type;
+    this.currentPage = 1;
+    this.performFilteredSearch();
+  }
+
+  onYearChange(): void {
+    this.year = this.year.replace(/\D/g, '').slice(0, 4);
+    this.currentPage = 1;
+    this.performFilteredSearch();
+  }
+
+  clearSearch(): void {
+    this.query = '';
+    this.results = [];
+    this.error = '';
+    this.totalResults = 0;
+    this.currentPage = 1;
+    this.totalPages = 1;
+    this.router.navigate([], {
+      queryParams: { q: null, type: this.selectedType || null, year: this.year || null },
+      replaceUrl: true
+    });
+  }
+
+  private performFilteredSearch(): void {
+    if (!this.query.trim()) return;
+    this.fetchMovies();
+    this.updateQueryParams();
+  }
+
+  private updateQueryParams(): void {
+    this.router.navigate([], {
+      queryParams: {
+        q: this.query,
+        type: this.selectedType || null,
+        year: this.year || null
+      },
+      replaceUrl: true
+    });
   }
 
   isFavorite(id: string): boolean {

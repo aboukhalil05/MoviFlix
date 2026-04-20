@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { MovieService } from '../../services/movie.service';
 import { MovieSearchResult } from '../../models/movie.model';
+import { FavoritesService } from '../../services/favorites.service';
 
 @Component({
   selector: 'app-favorites',
@@ -14,18 +14,17 @@ import { MovieSearchResult } from '../../models/movie.model';
 export class FavoritesComponent implements OnInit {
   favorites: MovieSearchResult[] = [];
 
-  constructor(private movieService: MovieService) {}
+  constructor(private favoritesService: FavoritesService) {}
 
   ngOnInit(): void {
-    this.favorites = this.movieService.getFavorites();
+    this.favorites = this.favoritesService.getAll();
   }
 
   removeFromFavorites(event: Event, movie: MovieSearchResult): void {
     event.preventDefault();
     event.stopPropagation();
-    this.movieService.toggleFavorite(movie);
-    // Refresh local list after removal
-    this.favorites = this.movieService.getFavorites();
+    this.favoritesService.remove(movie.imdbID);
+    this.favorites = this.favoritesService.getAll();
   }
 
   getPosterUrl(poster: string): string {
@@ -34,7 +33,7 @@ export class FavoritesComponent implements OnInit {
 
   clearAll(): void {
     if (!confirm('Remove all favorites?')) return;
-    this.favorites.forEach(m => this.movieService.toggleFavorite(m));
+    this.favorites.forEach(m => this.favoritesService.remove(m.imdbID));
     this.favorites = [];
   }
 }

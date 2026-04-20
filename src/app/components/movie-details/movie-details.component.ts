@@ -88,4 +88,63 @@ export class MovieDetailsComponent implements OnInit {
   get actorList(): string[] {
     return this.movie?.Actors?.split(',').map(a => a.trim()) || [];
   }
+
+  get imdbScoreValue(): string {
+    if (!this.movie?.imdbRating || this.movie.imdbRating === 'N/A') return 'N/A';
+    return `${this.movie.imdbRating}/10`;
+  }
+
+  get imdbScorePercent(): number {
+    if (!this.movie?.imdbRating || this.movie.imdbRating === 'N/A') return 0;
+    const parsed = parseFloat(this.movie.imdbRating);
+    if (Number.isNaN(parsed)) return 0;
+    return Math.max(0, Math.min(100, Math.round((parsed / 10) * 100)));
+  }
+
+  get rottenScoreValue(): string {
+    const rating = this.getRatingValue('Rotten Tomatoes');
+    return rating || 'N/A';
+  }
+
+  get rottenScorePercent(): number {
+    return this.toPercent(this.rottenScoreValue);
+  }
+
+  get metacriticScoreValue(): string {
+    if (this.movie?.Metascore && this.movie.Metascore !== 'N/A') {
+      return `${this.movie.Metascore}/100`;
+    }
+    return this.getRatingValue('Metacritic') || 'N/A';
+  }
+
+  get metacriticScorePercent(): number {
+    return this.toPercent(this.metacriticScoreValue);
+  }
+
+  private getRatingValue(source: string): string | null {
+    if (!this.movie?.Ratings?.length) return null;
+    const item = this.movie.Ratings.find(r => r.Source === source);
+    return item?.Value || null;
+  }
+
+  private toPercent(value: string): number {
+    if (!value || value === 'N/A') return 0;
+
+    if (value.includes('%')) {
+      const pct = parseFloat(value.replace('%', ''));
+      return Number.isNaN(pct) ? 0 : Math.max(0, Math.min(100, Math.round(pct)));
+    }
+
+    if (value.includes('/')) {
+      const [numRaw, denRaw] = value.split('/');
+      const num = parseFloat(numRaw);
+      const den = parseFloat(denRaw);
+      if (Number.isNaN(num) || Number.isNaN(den) || den === 0) return 0;
+      return Math.max(0, Math.min(100, Math.round((num / den) * 100)));
+    }
+
+    const numeric = parseFloat(value);
+    if (Number.isNaN(numeric)) return 0;
+    return Math.max(0, Math.min(100, Math.round(numeric)));
+  }
 }

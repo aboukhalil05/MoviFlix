@@ -1,5 +1,10 @@
-// Movie search result (from ?s= endpoint)
-export interface MovieSearchResult {
+export interface Rating {
+  Source: string;
+  Value: string;
+}
+
+// Search item from OMDB (?s=)
+export interface SearchResult {
   Title: string;
   Year: string;
   imdbID: string;
@@ -7,16 +12,8 @@ export interface MovieSearchResult {
   Poster: string;
 }
 
-// Search API response
-export interface SearchResponse {
-  Search: MovieSearchResult[];
-  totalResults: string;
-  Response: string;
-  Error?: string;
-}
-
-// Full movie detail (from ?i= endpoint)
-export interface MovieDetail {
+// Complete movie payload from OMDB (?i= / ?t=)
+export interface Movie {
   Title: string;
   Year: string;
   Rated: string;
@@ -32,15 +29,27 @@ export interface MovieDetail {
   Awards: string;
   Poster: string;
   Ratings: Rating[];
+  Metascore: string;
   imdbRating: string;
   imdbVotes: string;
   imdbID: string;
   Type: string;
-  BoxOffice: string;
+  DVD?: string;
+  BoxOffice?: string;
+  Production?: string;
+  Website?: string;
+  totalSeasons?: string;
   Response: string;
+  Error?: string;
 }
 
-export interface Rating {
-  Source: string;
-  Value: string;
+export interface SearchResponse {
+  Search: SearchResult[];
+  totalResults: string;
+  Response: string;
+  Error?: string;
 }
+
+// Backward-compatible aliases used in current app
+export type MovieSearchResult = SearchResult;
+export type MovieDetail = Movie;

@@ -15,29 +15,54 @@ import { RouterLink } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
   quickSearch = '';
-  featured: MovieSearchResult[] = [];
+  marvelMovies: MovieSearchResult[] = [];
+  nolanMovies: MovieSearchResult[] = [];
+  actionMovies: MovieSearchResult[] = [];
   loading = false;
-
-  // Curated featured movie IDs for the homepage showcase
-  featuredIds = ['tt0816692', 'tt1375666', 'tt0468569', 'tt0110912', 'tt0137523'];
 
   constructor(private movieService: MovieService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loadFeatured();
+    this.loadSections();
   }
 
-  loadFeatured(): void {
+  loadSections(): void {
     this.loading = true;
-    // Search for "Interstellar" to get some results for featured section
-    this.movieService.searchMovies('christopher nolan').subscribe({
+
+    let completed = 0;
+    const markDone = () => {
+      completed += 1;
+      if (completed === 3) this.loading = false;
+    };
+
+    this.movieService.searchMovies('marvel', 1, 'movie').subscribe({
       next: res => {
         if (res.Response === 'True') {
-          this.featured = res.Search.slice(0, 6);
+          this.marvelMovies = res.Search.slice(0, 10);
         }
-        this.loading = false;
+        markDone();
       },
-      error: () => { this.loading = false; }
+      error: () => { markDone(); }
+    });
+
+    this.movieService.searchMovies('christopher nolan', 1, 'movie').subscribe({
+      next: res => {
+        if (res.Response === 'True') {
+          this.nolanMovies = res.Search.slice(0, 10);
+        }
+        markDone();
+      },
+      error: () => { markDone(); }
+    });
+
+    this.movieService.searchMovies('action', 1, 'movie').subscribe({
+      next: res => {
+        if (res.Response === 'True') {
+          this.actionMovies = res.Search.slice(0, 10);
+        }
+        markDone();
+      },
+      error: () => { markDone(); }
     });
   }
 

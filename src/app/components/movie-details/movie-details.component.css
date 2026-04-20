@@ -438,6 +438,49 @@
 
 :host-context(.dark) .rating-value { color: #39c447; }
 
+.score-bars {
+  gap: 0.75rem;
+}
+
+.score-item {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6rem;
+}
+
+.score-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.score-track {
+  position: relative;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(57, 196, 71, 0.12), rgba(57, 196, 71, 0.2));
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1e6626 0%, #27a033 45%, #6fd97a 100%);
+  transition: width 0.8s ease;
+  box-shadow: 0 0 12px rgba(39, 160, 51, 0.3);
+}
+
+:host-context(.dark) .score-track {
+  background: linear-gradient(90deg, rgba(39, 160, 51, 0.14), rgba(15, 46, 20, 0.7));
+}
+
+:host-context(.dark) .score-fill {
+  background: linear-gradient(90deg, #27a033 0%, #39c447 55%, #a8edaf 100%);
+  box-shadow: 0 0 14px rgba(57, 196, 71, 0.38);
+}
+
 /* Extra info */
 .extra-grid {
   display: grid;

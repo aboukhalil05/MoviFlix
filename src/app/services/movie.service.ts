@@ -10,13 +10,16 @@ import { MovieDetail, MovieSearchResult, SearchResponse } from '../models/movie.
 export class MovieService {
   private readonly API_KEY = 'd95e4187';
   private readonly BASE_URL = 'https://www.omdbapi.com/';
-  private readonly FAVORITES_KEY = 'cinesearch_favorites';
+  private readonly FAVORITES_KEY = 'moviflix_favorites';
+  private readonly LEGACY_FAVORITES_KEY = 'cinesearch_favorites';
 
   constructor(private http: HttpClient) {}
 
   /** Search movies by title — uses ?s= endpoint */
-  searchMovies(query: string, page: number = 1): Observable<SearchResponse> {
-    const url = `${this.BASE_URL}?s=${encodeURIComponent(query)}&page=${page}&apikey=${this.API_KEY}`;
+  searchMovies(query: string, page: number = 1, type: string = '', year: string = ''): Observable<SearchResponse> {
+    const typeParam = type ? `&type=${encodeURIComponent(type)}` : '';
+    const yearParam = year ? `&y=${encodeURIComponent(year)}` : '';
+    const url = `${this.BASE_URL}?s=${encodeURIComponent(query)}&page=${page}${typeParam}${yearParam}&apikey=${this.API_KEY}`;
     return this.http.get<SearchResponse>(url).pipe(
       catchError(err => throwError(() => new Error('Network error: ' + err.message)))
     );
@@ -33,7 +36,23 @@ export class MovieService {
   // ── Favorites via localStorage ──────────────────────────────
   getFavorites(): MovieSearchResult[] {
     const raw = localStorage.getItem(this.FAVORITES_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (raw) {
+      return JSON.parse(raw);
+    }
+
+    // Backward compatibility: migrate old favorites key once.
+    const legacyRaw = localStorage.getItem(this.LEGACY_FAVORITES_KEY);
+    if (!legacyRaw) return [];
+
+    try {
+      const legacyParsed = JSON.parse(legacyRaw);
+      if (!Array.isArray(legacyParsed)) return [];
+      localStorage.setItem(this.FAVORITES_KEY, JSON.stringify(legacyParsed));
+      localStorage.removeItem(this.LEGACY_FAVORITES_KEY);
+      return legacyParsed;
+    } catch {
+      return [];
+    }
   }
 
   isFavorite(imdbID: string): boolean {

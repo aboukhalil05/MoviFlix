@@ -72,7 +72,7 @@
 </section>
 
 <!-- ──────────────────────────────────────────────────── -->
-<!-- FEATURED FILMS SECTION                               -->
+<!-- CINEMATIC RAILS                                      -->
 <!-- ──────────────────────────────────────────────────── -->
 <section class="featured-section">
   <div class="section-wrapper">
@@ -80,11 +80,11 @@
     <!-- Section header -->
     <div class="section-header">
       <div class="section-title-group">
-        <span class="section-tag">À la une</span>
-        <h2 class="section-title">Films Vedettes</h2>
+        <span class="section-tag">Collections</span>
+        <h2 class="section-title">Rails Cinématographiques</h2>
       </div>
       <a routerLink="/search" class="see-all-link" id="home-see-all">
-        Voir tout
+        Explorer
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2.5">
           <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -103,42 +103,108 @@
       </div>
     </div>
 
-    <!-- Movie grid -->
-    <div class="movies-grid" *ngIf="!loading">
-      <a
-        *ngFor="let movie of featured"
-        [routerLink]="['/movie', movie.imdbID]"
-        class="movie-card"
-        id="home-movie-{{ movie.imdbID }}"
-      >
-        <!-- Poster -->
-        <div class="card-poster-wrap">
-          <img
-            [src]="movie.Poster !== 'N/A' ? movie.Poster : 'assets/no-poster.png'"
-            [alt]="movie.Title"
-            loading="lazy"
-            class="card-poster-img"
-          />
-          <!-- Overlay on hover -->
-          <div class="card-overlay">
-            <div class="overlay-btn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2.5">
-                <polygon points="5 3 19 12 5 21 5 3"/>
-              </svg>
-              Voir détails
+    <div class="rails-wrap" *ngIf="!loading">
+      <div class="movie-rail-section">
+        <div class="rail-head">
+          <h3 class="rail-title">Univers Marvel</h3>
+          <a routerLink="/search" [queryParams]="{ q: 'marvel', type: 'movie' }" class="rail-link">Voir plus</a>
+        </div>
+        <div class="movie-rail">
+          <a
+            *ngFor="let movie of marvelMovies"
+            [routerLink]="['/movie', movie.imdbID]"
+            class="movie-card"
+            id="home-marvel-{{ movie.imdbID }}"
+          >
+            <div class="card-poster-wrap">
+              <img
+                [src]="movie.Poster !== 'N/A' ? movie.Poster : 'assets/no-poster.png'"
+                [alt]="movie.Title"
+                loading="lazy"
+                class="card-poster-img"
+              />
+              <div class="card-overlay">
+                <div class="overlay-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.5">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                  Voir détails
+                </div>
+              </div>
+              <span class="year-badge">{{ movie.Year }}</span>
             </div>
-          </div>
-          <!-- Year badge -->
-          <span class="year-badge">{{ movie.Year }}</span>
+            <div class="card-info">
+              <h3 class="card-title">{{ movie.Title }}</h3>
+              <span class="card-type">{{ movie.Type | uppercase }}</span>
+            </div>
+          </a>
         </div>
+      </div>
 
-        <!-- Card info -->
-        <div class="card-info">
-          <h3 class="card-title">{{ movie.Title }}</h3>
-          <span class="card-type">{{ movie.Type | uppercase }}</span>
+      <div class="movie-rail-section">
+        <div class="rail-head">
+          <h3 class="rail-title">Signature Nolan</h3>
+          <a routerLink="/search" [queryParams]="{ q: 'christopher nolan', type: 'movie' }" class="rail-link">Voir plus</a>
         </div>
-      </a>
+        <div class="movie-rail">
+          <a
+            *ngFor="let movie of nolanMovies"
+            [routerLink]="['/movie', movie.imdbID]"
+            class="movie-card"
+            id="home-nolan-{{ movie.imdbID }}"
+          >
+            <div class="card-poster-wrap">
+              <img
+                [src]="movie.Poster !== 'N/A' ? movie.Poster : 'assets/no-poster.png'"
+                [alt]="movie.Title"
+                loading="lazy"
+                class="card-poster-img"
+              />
+              <div class="card-overlay">
+                <div class="overlay-btn">Voir détails</div>
+              </div>
+              <span class="year-badge">{{ movie.Year }}</span>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ movie.Title }}</h3>
+              <span class="card-type">{{ movie.Type | uppercase }}</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="movie-rail-section">
+        <div class="rail-head">
+          <h3 class="rail-title">Montée d'Adrénaline</h3>
+          <a routerLink="/search" [queryParams]="{ q: 'action', type: 'movie' }" class="rail-link">Voir plus</a>
+        </div>
+        <div class="movie-rail">
+          <a
+            *ngFor="let movie of actionMovies"
+            [routerLink]="['/movie', movie.imdbID]"
+            class="movie-card"
+            id="home-action-{{ movie.imdbID }}"
+          >
+            <div class="card-poster-wrap">
+              <img
+                [src]="movie.Poster !== 'N/A' ? movie.Poster : 'assets/no-poster.png'"
+                [alt]="movie.Title"
+                loading="lazy"
+                class="card-poster-img"
+              />
+              <div class="card-overlay">
+                <div class="overlay-btn">Voir détails</div>
+              </div>
+              <span class="year-badge">{{ movie.Year }}</span>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ movie.Title }}</h3>
+              <span class="card-type">{{ movie.Type | uppercase }}</span>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
 
   </div>

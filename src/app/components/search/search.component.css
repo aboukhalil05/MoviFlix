@@ -153,6 +153,108 @@
 :host-context(.dark) .bar-submit { color: #0a1a0d; }
 :host-context(.dark) .bar-submit:hover { background-color: #39c447; }
 
+/* ── Search Filters ────────────────────────────────────── */
+.search-filters {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.type-toggle-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.type-toggle {
+  border: 1px solid #a8edaf;
+  background-color: white;
+  color: #174a1d;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.type-toggle:hover {
+  border-color: #39c447;
+  background-color: #f0fdf1;
+}
+
+.type-toggle-active {
+  background-color: #27a033;
+  border-color: #27a033;
+  color: #fff;
+}
+
+.type-toggle-active:hover {
+  background-color: #1e6626;
+  border-color: #1e6626;
+}
+
+.year-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.year-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #27a033;
+}
+
+.year-input {
+  width: 7.5rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.55rem;
+  border: 1px solid #a8edaf;
+  background-color: white;
+  color: #174a1d;
+  font-size: 0.82rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.year-input:focus {
+  outline: none;
+  border-color: #39c447;
+  box-shadow: 0 0 0 3px rgba(39, 160, 51, 0.12);
+}
+
+:host-context(.dark) .type-toggle {
+  background-color: #0f2e14;
+  border-color: rgba(30, 102, 38, 0.4);
+  color: #6fd97a;
+}
+
+:host-context(.dark) .type-toggle:hover {
+  background-color: #174a1d;
+  border-color: #27a033;
+}
+
+:host-context(.dark) .type-toggle-active {
+  background-color: #27a033;
+  border-color: #27a033;
+  color: #0a1a0d;
+}
+
+:host-context(.dark) .year-label { color: #39c447; }
+
+:host-context(.dark) .year-input {
+  background-color: #0f2e14;
+  border-color: rgba(30, 102, 38, 0.4);
+  color: #a8edaf;
+}
+
 /* ── Results zone ──────────────────────────────────────── */
 .results-zone { max-width: 80rem; margin: 0 auto; padding: 2rem 1rem; }
 

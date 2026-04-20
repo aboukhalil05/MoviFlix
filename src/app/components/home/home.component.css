@@ -288,19 +288,66 @@
 :host-context(.dark) .see-all-link { color: #39c447; }
 :host-context(.dark) .see-all-link:hover { color: #6fd97a; }
 
-/* ── Movies grid ──────────────────────────────────────────── */
-.movies-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+/* ── Cinematic rails ──────────────────────────────────────── */
+.rails-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.movie-rail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.rail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 1rem;
 }
 
-@media (min-width: 640px) {
-  .movies-grid { grid-template-columns: repeat(3, 1fr); }
+.rail-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0a1a0d;
 }
 
-@media (min-width: 1024px) {
-  .movies-grid { grid-template-columns: repeat(6, 1fr); }
+:host-context(.dark) .rail-title { color: #d4f5d8; }
+
+.rail-link {
+  color: #27a033;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.rail-link:hover { text-decoration: underline; }
+
+.movie-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(145px, 1fr);
+  gap: 0.9rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;
+}
+
+.movie-rail .movie-card { scroll-snap-align: start; }
+
+.movie-rail::-webkit-scrollbar {
+  height: 8px;
+}
+
+.movie-rail::-webkit-scrollbar-thumb {
+  background-color: rgba(39, 160, 51, 0.35);
+  border-radius: 999px;
+}
+
+:host-context(.dark) .movie-rail::-webkit-scrollbar-thumb {
+  background-color: rgba(57, 196, 71, 0.4);
 }
 
 .movie-card { text-decoration: none; }

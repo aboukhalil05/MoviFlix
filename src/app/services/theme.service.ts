@@ -5,21 +5,23 @@ import { Injectable, signal, effect } from '@angular/core';
 })
 export class ThemeService {
   private readonly STORAGE_KEY = 'moviflix_theme';
+  private readonly isDarkSignal = signal<boolean>(this.getInitialTheme());
 
   /** Reactive signal — true = dark mode */
-  isDark = signal<boolean>(this.getInitialTheme());
+  readonly isDark = this.isDarkSignal.asReadonly();
 
   constructor() {
-    // Apply theme from signal whenever it changes
+    // Apply + persist theme whenever signal changes
     effect(() => {
-      this.applyTheme(this.isDark());
+      const dark = this.isDarkSignal();
+      this.applyTheme(dark);
+      localStorage.setItem(this.STORAGE_KEY, dark ? 'dark' : 'light');
     });
   }
 
   /** Toggle between dark and light */
   toggle(): void {
-    this.isDark.update(v => !v);
-    localStorage.setItem(this.STORAGE_KEY, this.isDark() ? 'dark' : 'light');
+    this.isDarkSignal.update(v => !v);
   }
 
   private getInitialTheme(): boolean {
@@ -31,10 +33,13 @@ export class ThemeService {
 
   private applyTheme(dark: boolean): void {
     const html = document.documentElement;
+    const body = document.body;
     if (dark) {
       html.classList.add('dark');
+      body.classList.add('dark');
     } else {
       html.classList.remove('dark');
+      body.classList.remove('dark');
     }
   }
 }

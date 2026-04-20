@@ -136,12 +136,37 @@
         </section>
 
         <!-- Ratings -->
-        <section class="detail-section" *ngIf="movie.Ratings && movie.Ratings.length > 0">
-          <h2 class="section-label">Notes</h2>
-          <div class="ratings-list">
-            <div *ngFor="let r of movie.Ratings" class="rating-item">
-              <span class="rating-source">{{ r.Source }}</span>
-              <span class="rating-value">{{ r.Value }}</span>
+        <section class="detail-section">
+          <h2 class="section-label">Scores</h2>
+          <div class="ratings-list score-bars">
+            <div class="rating-item score-item">
+              <div class="score-header">
+                <span class="rating-source">IMDb</span>
+                <span class="rating-value">{{ imdbScoreValue }}</span>
+              </div>
+              <div class="score-track">
+                <div class="score-fill" [style.width.%]="imdbScorePercent"></div>
+              </div>
+            </div>
+
+            <div class="rating-item score-item">
+              <div class="score-header">
+                <span class="rating-source">Rotten Tomatoes</span>
+                <span class="rating-value">{{ rottenScoreValue }}</span>
+              </div>
+              <div class="score-track">
+                <div class="score-fill" [style.width.%]="rottenScorePercent"></div>
+              </div>
+            </div>
+
+            <div class="rating-item score-item">
+              <div class="score-header">
+                <span class="rating-source">Metacritic</span>
+                <span class="rating-value">{{ metacriticScoreValue }}</span>
+              </div>
+              <div class="score-track">
+                <div class="score-fill" [style.width.%]="metacriticScorePercent"></div>
+              </div>
             </div>
           </div>
         </section>
