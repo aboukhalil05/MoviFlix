@@ -1,65 +1,54 @@
 import { Injectable, signal } from '@angular/core';
-import { MovieSearchResult } from '../models/movie.model';
+import { Movie } from '../models/movie.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FavoritesService {
-  private readonly storageKey = 'moviflix_favorites';
-  private readonly legacyStorageKey = 'cinesearch_favorites';
-  private readonly favoritesSignal = signal<MovieSearchResult[]>(this.loadFromStorage());
+  private readonly STORAGE_KEY = 'moviflix_favorites';
+  public favorites = signal<Movie[]>([]);
 
-  readonly favorites = this.favoritesSignal.asReadonly();
-
-  add(movie: MovieSearchResult): void {
-    const favorites = this.favoritesSignal();
-    if (favorites.some(item => item.imdbID === movie.imdbID)) return;
-
-    const updated = [...favorites, movie];
-    this.favoritesSignal.set(updated);
-    this.persist(updated);
+  constructor() {
+    this.initFromLocalStorage();
   }
 
-  remove(imdbID: string): void {
-    const updated = this.favoritesSignal().filter(movie => movie.imdbID !== imdbID);
-    this.favoritesSignal.set(updated);
-    this.persist(updated);
+  private initFromLocalStorage(): void {
+    const stored = localStorage.getItem(this.STORAGE_KEY);
+    if (stored) {
+      try {
+        this.favorites.set(JSON.parse(stored));
+      } catch (e) {
+        console.error('Failed to parse favorites from local storage');
+      }
+    }
+  }
+
+  private persist(): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.favorites()));
+  }
+
+  addFavorite(movie: Movie): void {
+    if (!this.isFavorite(movie.imdbID)) {
+      this.favorites.update(favs => [...favs, movie]);
+      this.persist();
+    }
+  }
+
+  removeFavorite(imdbID: string): void {
+    this.favorites.update(favs => favs.filter(m => m.imdbID !== imdbID));
+    this.persist();
   }
 
   isFavorite(imdbID: string): boolean {
-    return this.favoritesSignal().some(movie => movie.imdbID === imdbID);
+    return this.favorites().some(m => m.imdbID === imdbID);
   }
 
-  getAll(): MovieSearchResult[] {
-    return this.favoritesSignal();
+  getAll(): Movie[] {
+    return this.favorites();
   }
-
-  private loadFromStorage(): MovieSearchResult[] {
-    const raw = localStorage.getItem(this.storageKey);
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch {
-        return [];
-      }
-    }
-
-    const legacyRaw = localStorage.getItem(this.legacyStorageKey);
-    if (!legacyRaw) return [];
-
-    try {
-      const legacyParsed = JSON.parse(legacyRaw);
-      if (!Array.isArray(legacyParsed)) return [];
-      localStorage.setItem(this.storageKey, JSON.stringify(legacyParsed));
-      localStorage.removeItem(this.legacyStorageKey);
-      return legacyParsed;
-    } catch {
-      return [];
-    }
-  }
-
-  private persist(favorites: MovieSearchResult[]): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(favorites));
+  
+  reorder(newOrder: Movie[]): void {
+    this.favorites.set(newOrder);
+    this.persist();
   }
 }

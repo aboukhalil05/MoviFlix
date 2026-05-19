@@ -1,41 +1,71 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { Movie, SearchResult } from '../models/movie.model';
 import { environment } from '../../environments/environment';
-import { MovieDetail, SearchResponse } from '../models/movie.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OmdbService {
-  private readonly baseUrl = environment.omdbBaseUrl;
-  private readonly apiKey = environment.apiKey;
+  private http = inject(HttpClient);
+  private baseUrl = 'https://www.omdbapi.com/';
+  private apiKey = environment.omdbKey;
+  
+  // Cache interne pour éviter les re-appels
+  private cache = new Map<string, any>();
 
-  constructor(private http: HttpClient) {}
+  searchMovies(query: string, page: number = 1, type?: string, year?: string): Observable<SearchResult> {
+    const typeParam = type ? `&type=${type}` : '';
+    const yearParam = year ? `&y=${year}` : '';
+    const url = `${this.baseUrl}?apikey=${this.apiKey}&s=${encodeURIComponent(query)}&page=${page}${typeParam}${yearParam}`;
+    
+    if (this.cache.has(url)) {
+      return of(this.cache.get(url));
+    }
 
-  searchMovies(query: string, page: number = 1, type?: string): Observable<SearchResponse> {
-    const typeParam = type ? `&type=${encodeURIComponent(type)}` : '';
-    const url = `${this.baseUrl}?s=${encodeURIComponent(query)}&page=${page}${typeParam}&apikey=${this.apiKey}`;
-
-    return this.http.get<SearchResponse>(url).pipe(
-      catchError(error => throwError(() => new Error(`OMDB search failed: ${error.message}`)))
+    return this.http.get<SearchResult>(url).pipe(
+      tap(data => {
+        if (data.Response === 'True') {
+          this.cache.set(url, data);
+        }
+      }),
+      catchError(() => of({ Search: [], totalResults: '0', Response: 'False' } as SearchResult))
     );
   }
 
-  getMovieById(id: string): Observable<MovieDetail> {
-    const url = `${this.baseUrl}?i=${encodeURIComponent(id)}&plot=full&apikey=${this.apiKey}`;
+  getMovieById(imdbID: string): Observable<Movie> {
+    const url = `${this.baseUrl}?apikey=${this.apiKey}&i=${imdbID}&plot=full`;
+    
+    if (this.cache.has(url)) {
+      return of(this.cache.get(url));
+    }
 
-    return this.http.get<MovieDetail>(url).pipe(
-      catchError(error => throwError(() => new Error(`OMDB get by id failed: ${error.message}`)))
+    return this.http.get<Movie>(url).pipe(
+      tap(data => {
+        if (data.Response === 'True') {
+          this.cache.set(url, data);
+        }
+      }),
+      catchError(() => of({ Response: 'False' } as Movie))
     );
   }
 
-  getMovieByTitle(title: string): Observable<MovieDetail> {
-    const url = `${this.baseUrl}?t=${encodeURIComponent(title)}&plot=full&apikey=${this.apiKey}`;
+  getMovieByTitle(title: string, plot: string = 'short'): Observable<Movie> {
+    const url = `${this.baseUrl}?apikey=${this.apiKey}&t=${encodeURIComponent(title)}&plot=${plot}`;
+    
+    if (this.cache.has(url)) {
+      return of(this.cache.get(url));
+    }
 
-    return this.http.get<MovieDetail>(url).pipe(
-      catchError(error => throwError(() => new Error(`OMDB get by title failed: ${error.message}`)))
+    return this.http.get<Movie>(url).pipe(
+      tap(data => {
+        if (data.Response === 'True') {
+          this.cache.set(url, data);
+        }
+      }),
+      catchError(() => of({ Response: 'False' } as Movie))
     );
   }
 }

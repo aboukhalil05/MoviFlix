@@ -1,45 +1,39 @@
-import { Injectable, signal, effect } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
   private readonly STORAGE_KEY = 'moviflix_theme';
-  private readonly isDarkSignal = signal<boolean>(this.getInitialTheme());
-
-  /** Reactive signal — true = dark mode */
-  readonly isDark = this.isDarkSignal.asReadonly();
+  public isDark = signal<boolean>(false);
 
   constructor() {
-    // Apply + persist theme whenever signal changes
-    effect(() => {
-      const dark = this.isDarkSignal();
-      this.applyTheme(dark);
-      localStorage.setItem(this.STORAGE_KEY, dark ? 'dark' : 'light');
-    });
+    this.initTheme();
   }
 
-  /** Toggle between dark and light */
-  toggle(): void {
-    this.isDarkSignal.update(v => !v);
-  }
-
-  private getInitialTheme(): boolean {
+  private initTheme(): void {
     const stored = localStorage.getItem(this.STORAGE_KEY);
-    if (stored) return stored === 'dark';
-    // Respect OS preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (stored) {
+      this.isDark.set(stored === 'dark');
+    } else {
+      // Vérifier la préférence système
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.isDark.set(prefersDark);
+    }
+    this.applyTheme();
   }
 
-  private applyTheme(dark: boolean): void {
-    const html = document.documentElement;
-    const body = document.body;
-    if (dark) {
-      html.classList.add('dark');
-      body.classList.add('dark');
+  toggle(): void {
+    this.isDark.update(v => !v);
+    localStorage.setItem(this.STORAGE_KEY, this.isDark() ? 'dark' : 'light');
+    this.applyTheme();
+  }
+
+  private applyTheme(): void {
+    if (this.isDark()) {
+      document.documentElement.classList.add('dark');
     } else {
-      html.classList.remove('dark');
-      body.classList.remove('dark');
+      document.documentElement.classList.remove('dark');
     }
   }
 }
